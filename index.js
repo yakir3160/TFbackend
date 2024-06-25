@@ -1,14 +1,17 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import 'dotenv/config';
-
+import routes from './routers/index.js';
 const app = express();
 app.use(express.json());
+
+// Use the user router
+app.use('/api', routes);
 
 const PORT = process.env.PORT;
 
 (async () => {
-    try{
+    try {
         await mongoose.connect(process.env.MONGODB_URI, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
@@ -23,4 +26,3 @@ const PORT = process.env.PORT;
         process.exit(1);
     }
 })();
-
