@@ -10,6 +10,10 @@ app.use(express.json());
 
 app.use('/api', routes);
 
+app.use('*', (req, res) => {
+    console.log(`No route found for ${req.method} ${req.originalUrl}`);
+    res.status(404).json({ message: 'Route not found' });
+});
 const PORT = process.env.PORT;
 
 (async () => {
