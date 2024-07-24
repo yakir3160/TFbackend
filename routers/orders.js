@@ -1,5 +1,6 @@
 import express from 'express';
 import Order from '../dal/models/Order.js';
+import Product from '../dal/models/Product.js';
 import mongoose from 'mongoose';
 
 
@@ -7,13 +8,8 @@ const router = express.Router();
 
 router.post('/', async (req, res) => {
     try {
-        console.log('Received request body:', JSON.stringify(req.body, null, 2));
-        console.log('Products from request:', JSON.stringify(req.body.products, null, 2));
 
         const { customerInfo, products, totalPrice } = req.body;
-
-        console.log('Destructured products:', JSON.stringify(products, null, 2));
-
 
         // Basic validation
         if (!customerInfo || !products || products.length === 0 || totalPrice === undefined) {
@@ -31,13 +27,13 @@ router.post('/', async (req, res) => {
             })) : [],
             totalPrice
         });
-        console.log('Products in new order:', JSON.stringify(order.products, null, 2));
-
-        console.log('Order before save:', JSON.stringify(order, null, 2));
 
         // Save the order
         const savedOrder = await order.save();
 
+        for (let item of products) {
+            await Product.findByIdAndUpdate(item.productId, { $inc: { orderCount: item.quantity } });
+        }
         // Send the saved order back to the client
         res.status(201).json({ success: true, orderId: savedOrder._id });
     } catch (error) {
@@ -55,10 +51,8 @@ router.post('/', async (req, res) => {
 });
 
 router.get('/', async (req, res) => {
-    console.log('GET request received for /api/orders');
     try {
         const orders = await Order.find().sort({ createdAt: -1 });
-        console.log(`Found ${orders.length} orders`);
         res.json(orders);
     } catch (error) {
         console.error('Error fetching orders:', error);
