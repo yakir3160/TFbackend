@@ -81,5 +81,15 @@ router.get('/best-sellers', async (req, res) => {
         res.status(500).json({ message: 'Error fetching best sellers', error: error.message });
     }
 });
+router.get('/new-products', async (req, res) => {
+    try {
+        const newProducts = await Product.find()
+            .sort({ addedAt: -1 })
+            .limit(8);
+        res.json(newProducts);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching new products', error: error.message });
+    }
+});
 
 export default router;
