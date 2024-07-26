@@ -17,6 +17,11 @@ const orderSchema = new mongoose.Schema({
     }],
     totalPrice: { type: Number, required: true },
     createdAt: { type: Date, default: Date.now },
+    status: {
+        type: String,
+        enum: ['processing', 'shipped', 'closed'],
+        default: 'processing'
+    },
 });
 
 const Order = mongoose.model('Order', orderSchema);

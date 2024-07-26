@@ -59,5 +59,18 @@ router.get('/', async (req, res) => {
         res.status(500).json({ message: 'Error fetching orders', error: error.message });
     }
 });
-
+router.put('/:id/status', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { status } = req.body;
+        const updatedOrder = await Order.findByIdAndUpdate(id, { status }, { new: true });
+        if (!updatedOrder) {
+            return res.status(404).json({ error: 'Order not found' });
+        }
+        res.json(updatedOrder);
+    } catch (error) {
+        console.error('Error updating order status:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
 export default router;
