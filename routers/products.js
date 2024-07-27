@@ -91,5 +91,34 @@ router.get('/new-products', async (req, res) => {
         res.status(500).json({ message: 'Error fetching new products', error: error.message });
     }
 });
+router.put('/products/:id', async (req, res) => {
+    try {
+        const { pricePerKg } = req.body;
+        const updatedProduct = await Product.findByIdAndUpdate(
+            req.params.id,
+            { pricePerKg },
+            { new: true }
+        );
+        if (!updatedProduct) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+        res.json(updatedProduct);
+    } catch (error) {
+        res.status(500).json({ message: 'Error updating product', error: error.message });
+    }
+});
+router.delete('/products/:id', async (req, res) => {
+    try {
+        const deletedProduct = await Product.findByIdAndDelete(req.params.id);
+        if (!deletedProduct) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+        res.json({ message: 'Product deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Error deleting product', error: error.message });
+    }
+});
+
+
 
 export default router;

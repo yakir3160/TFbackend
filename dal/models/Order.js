@@ -10,7 +10,7 @@ const orderSchema = new mongoose.Schema({
         phone: { type: String, required: true }
     },
     products: [{
-        productId: { type: String, required: true }, // Make sure this is String, not ObjectId
+        productId: { type: String, required: true },
         name: { type: String, required: true },
         quantity: { type: Number, required: true },
         pricePerKg: { type: Number, required: true }
