@@ -3,6 +3,7 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import 'dotenv/config';
 import routes from './routers/index.js';
+import productsRoutes from './routers/products.js';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 const app = express();
@@ -21,6 +22,9 @@ app.use('*', (req, res) => {
     console.log(`No route found for ${req.method} ${req.originalUrl}`);
     res.status(404).json({ message: 'Route not found' });
 });
+
+app.use('/api/products', productsRoutes);
+
 const PORT = process.env.PORT;
 
 (async () => {

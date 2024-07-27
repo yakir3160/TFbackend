@@ -91,7 +91,7 @@ router.get('/new-products', async (req, res) => {
         res.status(500).json({ message: 'Error fetching new products', error: error.message });
     }
 });
-router.put('/products/:id', async (req, res) => {
+router.put('/:id', async (req, res) => {
     try {
         const { pricePerKg } = req.body;
         const updatedProduct = await Product.findByIdAndUpdate(
@@ -107,7 +107,7 @@ router.put('/products/:id', async (req, res) => {
         res.status(500).json({ message: 'Error updating product', error: error.message });
     }
 });
-router.delete('/products/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
     try {
         const deletedProduct = await Product.findByIdAndDelete(req.params.id);
         if (!deletedProduct) {
